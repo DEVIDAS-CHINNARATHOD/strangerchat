@@ -1,157 +1,156 @@
 # StrangerChat
 
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/git/external?repository-url=https%3A%2F%2Fgithub.com%2FDEVIDAS-CHINNARATHOD%2Fstrangerchat)
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+
 StrangerChat is a real-time video and text chat application that allows users to connect with strangers anonymously. It features WebRTC for peer-to-peer video/audio communication and Socket.IO for signaling and text messaging.
 
-## Features
+## 🌟 Features
 
-- Anonymous chat (no login required)
-- Two modes: Random Chat and Lobby List
-- Real-time video and text chat
-- WebRTC peer-to-peer connection
-- Ability to mute audio
-- Next/End Chat functionality
+- **Anonymous Chat**: No registration or login required
+- **Multiple Modes**: 
+  - Random Chat: Connect with random strangers
+  - Lobby: Join public chat rooms
+- **Real-time Communication**:
+  - Video and audio calls
+  - Text messaging
+  - Typing indicators
+- **User Controls**:
+  - Mute/unmute audio
+  - Toggle video on/off
+  - End chat anytime
+  - Next chat option
+- **Responsive Design**: Works on desktop and mobile devices
 
-## Tech Stack
+## 🚀 Live Demo
 
-### Frontend (Deployed on Vercel)
-- React.js
-- Tailwind CSS
-- Socket.IO Client
-- WebRTC API
+- **Frontend**: [View Live Demo](https://strangerchat-app.vercel.app)
+- **Backend API**: [API Documentation](https://strangerchat-api.onrender.com)
 
-### Backend (Deployed on Render)
-- Node.js
-- Express
-- Socket.IO
-- WebRTC Signaling
+## 🛠 Tech Stack
 
-## Deployment
-
-### Backend (Render)
-1. Push code to your GitHub repository
-2. Create a new Web Service on [Render](https://render.com/)
-3. Connect your repository
-4. Set build command: `npm install`
-5. Set start command: `node index.js`
-6. Add environment variables:
-   - `NODE_ENV=production`
-   - `PORT=10000`
-7. Deploy
-
-### Frontend (Vercel)
-1. Push code to your GitHub repository
-2. Create a new project on [Vercel](https://vercel.com/)
-3. Import your repository
-4. Set environment variables:
-   - `REACT_APP_BACKEND_URL`: Your Render backend URL (e.g., https://strangerchat-backend.onrender.com)
-   - `REACT_APP_ENV=production`
-5. Deploy
+### Frontend
+- **Framework**: React.js
+- **Styling**: Tailwind CSS
+- **State Management**: React Context API
+- **Real-time**: Socket.IO Client
+- **WebRTC**: Peer-to-peer video/audio
 
 ### Backend
-- Node.js
-- Express.js
-- Socket.IO
+- **Runtime**: Node.js
+- **Framework**: Express.js
+- **WebSockets**: Socket.IO
+- **CORS**: Cross-Origin Resource Sharing
+- **Environment**: Environment variables
 
-## Setup and Installation
+## 🚀 Quick Start
 
 ### Prerequisites
-- Node.js (v14 or higher)
-- npm or yarn
+- Node.js (v16 or higher)
+- npm (v7 or higher) or yarn
 
-### Quick Setup (Recommended)
+### Local Development
 
-1. Install all dependencies at once:
-   ```
-   cd strengerchat
-   npm run install-all
-   ```
-
-2. Start both the client and server:
-   ```
-   npm start
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/DEVIDAS-CHINNARATHOD/strangerchat.git
+   cd strangerchat
    ```
 
-   This will start the server on `http://localhost:9000` and the client on `http://localhost:3000`.
-
-### Manual Setup
-
-#### Backend Setup
-
-1. Navigate to the server directory:
-   ```
-   cd strengerchat/server
-   ```
-
-2. Install dependencies:
-   ```
+2. **Install dependencies**
+   ```bash
+   # Install root dependencies
    npm install
-   ```
-
-3. Start the server:
-   ```
-   npm run dev
-   ```
-
-   The server will run on `http://localhost:8080`.
-
-#### Frontend Setup
-
-1. Navigate to the client directory:
-   ```
-   cd strengerchat/client
-   ```
-
-2. Install dependencies:
-   ```
+   
+   # Install server dependencies
+   cd server
    npm install
+   
+   # Install client dependencies
+   cd ../client
+   npm install
+   cd ..
    ```
 
-3. Start the development server:
-   ```
-   npm start
-   ```
+3. **Environment Setup**
+   - Create a `.env` file in the `client` directory:
+     ```env
+     REACT_APP_BACKEND_URL=http://localhost:9000
+     REACT_APP_ENV=development
+     REACT_APP_NAME=StrangerChat
+     ```
 
-   The client will run on `http://localhost:3000`.
+4. **Start Development Servers**
+   - In one terminal (backend):
+     ```bash
+     cd server
+     npm run dev
+     ```
+   - In another terminal (frontend):
+     ```bash
+     cd client
+     npm start
+     ```
 
-## How It Works
+5. **Access the Application**
+   - Frontend: http://localhost:3000
+   - Backend API: http://localhost:9000
 
-### WebRTC Connection Flow
+## 🌐 Production Deployment
 
-1. User A and User B are matched (either randomly or via lobby)
-2. User A creates an offer and sends it to User B via the signaling server
-3. User B receives the offer, creates an answer, and sends it back to User A
-4. Both users exchange ICE candidates
-5. A peer-to-peer connection is established
-6. Video and audio streams are exchanged directly between users
+### Backend Deployment (Render)
+1. Push your code to a GitHub repository
+2. Create a new Web Service on [Render](https://render.com/)
+3. Connect your GitHub repository
+4. Configure the service:
+   - **Build Command**: `npm install`
+   - **Start Command**: `node index.js`
+   - **Environment Variables**:
+     - `NODE_ENV=production`
+     - `PORT=10000`
 
-### Socket.IO Events
+### Frontend Deployment (Vercel)
+1. Push your code to a GitHub repository
+2. Create a new project on [Vercel](https://vercel.com/)
+3. Import your repository
+4. Configure environment variables:
+   - `REACT_APP_BACKEND_URL`: Your Render backend URL (e.g., `https://strangerchat-api.onrender.com`)
+   - `REACT_APP_ENV=production`
+   - `REACT_APP_NAME=StrangerChat`
 
-- `join-random`: Join the random chat queue
-- `join-lobby`: Join the lobby with a nickname
-- `connect-request`: Send a chat request to a user in the lobby
-- `accept-request`: Accept a chat request
-- `offer`, `answer`, `ice-candidate`: WebRTC signaling events
-- `message`: Send a text message
-- `end-chat`: End the current chat
+## 🔧 Troubleshooting
 
-## Testing with Multiple Users
+### Common Issues
+1. **Video/Audio Not Working**
+   - Ensure browser permissions are granted for camera and microphone
+   - Try using Chrome or Firefox
+   - Check for any browser extensions blocking WebRTC
 
-To test the application with multiple users:
-1. Open the application in two different browser windows or tabs
-2. In one window, join the random chat or lobby
-3. In the other window, do the same
-4. You should be able to connect and chat between the two windows
+2. **Connection Issues**
+   - Verify both frontend and backend are running
+   - Check browser console for errors (F12 > Console)
+   - Ensure CORS is properly configured on the backend
 
-## License
+3. **Development vs Production**
+   - Use `http://localhost:9000` for development
+   - Use your production URL (e.g., `https://strangerchat-api.onrender.com`) in production
 
-MIT 
+## 🤝 Contributing
 
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
+## 📄 License
 
-for frontend
-cd strengerchat\client; npm start
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-for backend
-cd strengerchat\server; node index.js
+## 🙏 Acknowledgments
 
-
+- [WebRTC](https://webrtc.org/) for real-time communication
+- [Socket.IO](https://socket.io/) for WebSocket communication
+- [React](https://reactjs.org/) for the frontend framework
+- [Tailwind CSS](https://tailwindcss.com/) for styling
+- [Vercel](https://vercel.com/) and [Render](https://render.com/) for hosting

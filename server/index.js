@@ -9,7 +9,7 @@ app.use(cors());
 const server = http.createServer(app);
 const allowedOrigins = [
   'https://strangerchat-app.vercel.app', // Production frontend
-  'http://localhost:3000' // Local development
+  // Local development
 ];
 
 const io = new Server(server, {
