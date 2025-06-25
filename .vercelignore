@@ -1,22 +1,14 @@
-# Ignore everything
-*/
-
-# Except these files and directories
-!client
-!package.json
-!package-lock.json
+# Only include the client directory
+**
+!client/**
 !vercel.json
-!.vercelignore
 
-# Node modules are installed during build
-**/node_modules
+# Ignore node_modules (will be installed by Vercel)
+**/node_modules/
 
-# Server files (not needed for frontend)
-server/
+# Ignore build output (will be generated during build)
+client/build/
 
-# Environment files (handled by Vercel)
-.env
-.env.local
-.env.development
-.env.test
-.env.production
+# Ignore environment files (handled by Vercel)
+.env*
+!.env.example
