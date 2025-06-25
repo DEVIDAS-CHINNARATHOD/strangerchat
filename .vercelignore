@@ -1,18 +1,26 @@
-# Include only necessary files
+# Include all files by default
 **
+
+# Include the client directory and its contents
+!client/
 !client/**
-!client/package.json
-!client/package-lock.json
-!client/public/**
-!client/src/**
+
+# Include the root configuration files
 !vercel.json
+!package.json
+!package-lock.json
 
-# Ignore node_modules (will be installed by Vercel)
+# Exclude node_modules and build output
 **/node_modules/
+**/build/
 
-# Ignore build output (will be generated during build)
-client/build/
-
-# Ignore environment files (handled by Vercel)
+# Exclude environment files (handled by Vercel)
 .env*
 !.env.example
+
+# Exclude server files (not needed for frontend)
+server/
+
+# Exclude git files
+.git/
+.gitignore
