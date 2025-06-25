@@ -1,7 +1,7 @@
 import { io } from 'socket.io-client';
 
 // Create a socket connection to the server
-const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:9000';
+const backendUrl = process.env.REACT_APP_BACKEND_URL || ' https://strangerchat-api.onrender.com';
 const socket = io(backendUrl, {
   autoConnect: false, // We'll connect manually when needed
   withCredentials: true,
