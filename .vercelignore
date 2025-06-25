@@ -1,6 +1,10 @@
-# Only include the client directory
+# Include only necessary files
 **
 !client/**
+!client/package.json
+!client/package-lock.json
+!client/public/**
+!client/src/**
 !vercel.json
 
 # Ignore node_modules (will be installed by Vercel)
