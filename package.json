@@ -9,7 +9,7 @@
     "server": "cd server && npm run dev",
     "client": "cd client && npm start",
     "install-all": "npm install && cd server && npm install && cd ../client && npm install",
-    "vercel-build": "cd client && npm install && npm run build"
+    "vercel-build": "cd client && CI=false npm install --no-audit --prefer-offline --no-optional && CI=false npm run build"
   },
   "dependencies": {
     "concurrently": "^8.2.0"
