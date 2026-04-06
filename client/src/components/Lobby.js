@@ -10,12 +10,10 @@ const Lobby = ({ onConnect }) => {
   const [searchTerm, setSearchTerm] = useState('');
   
   useEffect(() => {
-    // Set up lobby event listeners
     socket.on('lobby-update', handleLobbyUpdate);
     socket.on('connect-request', handleConnectRequest);
     socket.on('request-accepted', handleRequestAccepted);
     
-    // Clean up when component unmounts
     return () => {
       socket.off('lobby-update', handleLobbyUpdate);
       socket.off('connect-request', handleConnectRequest);
@@ -25,18 +23,14 @@ const Lobby = ({ onConnect }) => {
   }, []);
   
   const handleLobbyUpdate = (users) => {
-    // Filter out current user from the list
-    const filteredUsers = users.filter(user => user.id !== socket.id);
-    setLobbyUsers(filteredUsers);
+    setLobbyUsers(users.filter(user => user.id !== socket.id));
   };
   
   const handleConnectRequest = (data) => {
-    // Add to pending requests
     setPendingRequests(prev => [...prev, data]);
   };
   
   const handleRequestAccepted = (data) => {
-    // Connection request was accepted, start chat with partner
     if (onConnect) {
       onConnect(data.partnerId, 'lobby');
     }
@@ -44,58 +38,45 @@ const Lobby = ({ onConnect }) => {
   
   const joinLobby = (e) => {
     e.preventDefault();
-    
-    // Join lobby with nickname
     socket.emit('join-lobby', {
       nickname: nickname || 'Anonymous'
     });
-    
     setIsJoined(true);
   };
   
   const sendConnectRequest = (userId) => {
-    // Send connection request to user
     socket.emit('connect-request', userId);
-    
-    // Add to sent requests
     setSentRequests(prev => [...prev, userId]);
   };
   
   const acceptRequest = (request) => {
-    // Accept connection request
     socket.emit('accept-request', request.from);
-    
-    // Remove from pending requests
     setPendingRequests(prev => prev.filter(req => req.from !== request.from));
-    
-    // Start chat with partner
     if (onConnect) {
       onConnect(request.from, 'lobby');
     }
   };
   
   const rejectRequest = (request) => {
-    // Remove from pending requests
     setPendingRequests(prev => prev.filter(req => req.from !== request.from));
   };
   
-  // Filter users based on search term
   const filteredUsers = searchTerm
     ? lobbyUsers.filter(user => 
-        user.nickname.toLowerCase().includes(searchTerm.toLowerCase())
+        (user.nickname || '').toLowerCase().includes(searchTerm.toLowerCase())
       )
     : lobbyUsers;
   
   if (!isJoined) {
     return (
-      <div className="join-lobby-container">
-        <div className="join-lobby-card">
+      <div className="join-container">
+        <div className="join-card glass-panel">
           <h2>Join the Lobby</h2>
           <p className="join-description">
-            Enter a nickname to join the lobby and connect with other users.
+            Enter a nickname to join the lobby and connect with other users online.
           </p>
           
-          <form onSubmit={joinLobby} className="join-form">
+          <form onSubmit={joinLobby}>
             <div className="input-group">
               <label htmlFor="nickname">Your Nickname</label>
               <input
@@ -103,11 +84,11 @@ const Lobby = ({ onConnect }) => {
                 type="text"
                 value={nickname}
                 onChange={(e) => setNickname(e.target.value)}
-                placeholder="Enter your nickname"
-                className="nickname-input"
+                placeholder="e.g. Explorer123"
+                className="glass-input"
               />
             </div>
-            <button type="submit" className="join-button">
+            <button type="submit" className="join-button glass-button primary-button">
               Join Lobby
             </button>
           </form>
@@ -117,90 +98,71 @@ const Lobby = ({ onConnect }) => {
   }
   
   return (
-    <div className="lobby-container">
-      <div className="lobby-header">
+    <div className="room-container">
+      <div className="room-header glass-panel" style={{ borderRadius: '16px 16px 0 0', borderBottom: 'none' }}>
         <h2>Lobby</h2>
         <div className="user-count">
-          <span className="count">{lobbyUsers.length}</span> 
-          <span className="count-label">Users Online</span>
+          <span className="count">{lobbyUsers.length}</span> Users Online
         </div>
       </div>
       
-      <div className="lobby-content">
-        {/* Pending requests */}
-        {pendingRequests.length > 0 && (
-          <div className="requests-section">
-            <h3>Chat Requests</h3>
-            <div className="requests-list">
-              {pendingRequests.map((request, index) => (
-                <div key={index} className="request-card">
-                  <div className="request-user">
-                    <div className="user-avatar">
-                      {(request.userData?.nickname || 'A')[0].toUpperCase()}
-                    </div>
-                    <div className="request-details">
-                      <div className="request-name">
-                        {request.userData?.nickname || 'Anonymous'}
+      <div className="room-content glass-panel" style={{ borderRadius: '0 0 16px 16px', borderTop: '1px solid var(--glass-border)' }}>
+        <div className="list-section">
+          {pendingRequests.length > 0 && (
+            <div className="requests-section">
+              <h3>Chat Requests</h3>
+              <div className="scrollable-list" style={{ maxHeight: '200px' }}>
+                {pendingRequests.map((request, index) => (
+                  <div key={index} className="list-item-card request-card glass-panel">
+                    <div className="item-info">
+                      <div className="item-avatar">
+                        {(request.userData?.nickname || 'A')[0].toUpperCase()}
                       </div>
-                      <div className="request-message">
-                        wants to chat with you
+                      <div style={{ display: 'flex', flexDirection: 'column' }}>
+                        <span className="item-name">{request.userData?.nickname || 'Anonymous'}</span>
+                        <span style={{ fontSize: '0.85rem', color: 'var(--text-secondary)' }}>wants to chat</span>
                       </div>
                     </div>
+                    <div style={{ display: 'flex', gap: '0.5rem' }}>
+                      <button onClick={() => acceptRequest(request)} className="btn primary-button action-btn">Accept</button>
+                      <button onClick={() => rejectRequest(request)} className="btn danger-button action-btn">Decline</button>
+                    </div>
                   </div>
-                  <div className="request-actions">
-                    <button 
-                      onClick={() => acceptRequest(request)}
-                      className="accept-button"
-                    >
-                      Accept
-                    </button>
-                    <button 
-                      onClick={() => rejectRequest(request)}
-                      className="reject-button"
-                    >
-                      Decline
-                    </button>
-                  </div>
-                </div>
-              ))}
+                ))}
+              </div>
             </div>
-          </div>
-        )}
-        
-        {/* Search bar */}
-        <div className="search-bar">
-          <input
-            type="text"
-            placeholder="Search users..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
-        </div>
-        
-        {/* User list */}
-        <div className="users-section">
-          <h3>Available Users</h3>
+          )}
           
-          <div className="users-list">
+          <div className="search-bar">
+            <input
+              type="text"
+              placeholder="Search users..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="glass-input search-input"
+            />
+          </div>
+          
+          <h3>Available Users</h3>
+          <div className="scrollable-list">
             {filteredUsers.length === 0 ? (
-              <div className="empty-lobby">
+              <div style={{ textAlign: 'center', padding: '2rem', color: 'var(--text-secondary)' }}>
                 <p>No users available in the lobby</p>
-                {searchTerm && <p>Try a different search term</p>}
               </div>
             ) : (
               filteredUsers.map(user => (
-                <div key={user.id} className="user-card">
-                  <div className="user-info">
-                    <div className="user-avatar">
+                <div key={user.id} className="list-item-card">
+                  <div className="item-info">
+                    <div className="item-avatar">
                       {(user.nickname || 'A')[0].toUpperCase()}
                     </div>
-                    <div className="user-name">{user.nickname || 'Anonymous'}</div>
+                    <div className="item-name">{user.nickname || 'Anonymous'}</div>
                   </div>
                   <button
                     onClick={() => sendConnectRequest(user.id)}
                     disabled={sentRequests.includes(user.id)}
-                    className={`connect-button ${sentRequests.includes(user.id) ? 'sent' : ''}`}
+                    className={`btn action-btn glass-button ${!sentRequests.includes(user.id) ? 'primary-button' : ''}`}
+                    style={sentRequests.includes(user.id) ? { background: 'rgba(255,255,255,0.1)' } : {}}
                   >
                     {sentRequests.includes(user.id) ? 'Request Sent' : 'Connect'}
                   </button>
@@ -210,12 +172,8 @@ const Lobby = ({ onConnect }) => {
           </div>
         </div>
       </div>
-      
-      <div className="lobby-footer">
-        <p>You are in the lobby as <strong>{nickname || 'Anonymous'}</strong></p>
-      </div>
     </div>
   );
 };
 
-export default Lobby; 
+export default Lobby;
